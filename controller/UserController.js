@@ -1,5 +1,8 @@
 const UserSchema = require('../model/UserSchema');
 const bcrypt = require('bcrypt');
+const wt = require('jsonwebtoken');
+
+const secret = process.env.SECRET;
 
 const signup = async (req, resp) => {
     //console.log(req.body);
@@ -28,4 +31,33 @@ const signup = async (req, resp) => {
     }
 
 }
-module.exports = {signup}
+
+const login = async (req, resp) => {
+    //console.log(req.body);
+    try {
+
+        const existingUser = await UserSchema.findOne({email:req.body.email});
+
+        if(!existingUser){
+            return resp.status(404).json({'message': 'User not found!'});
+        }
+
+        const isConfirmed = await bcrypt.compare(req.body.password,existingUser.password);
+
+        if (!isConfirmed){
+            return resp.status(401).json({'message':"Password is wrong!"});
+        }
+
+        const token = wt.sign({userId:existingUser._id,email:existingUser.email,fullName:existingUser.fullName},
+            secret,
+            {expiresIn: '5h'});
+
+        resp.status(200).json({'token':token,'message':'User Logged!'});
+
+    } catch (e) {
+        resp.status(500).json({'message': 'something went wrong', error: e});
+    }
+
+}
+
+module.exports = {signup,login}
