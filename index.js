@@ -10,6 +10,7 @@ const passport = require('passport')
 require('dotenv').config();
 require('./middleware/PassportConfig');
 const bodyParser= require('body-parser');
+const session = require('express-session')
 
 const serverPort = process.env.SERVER_PORT;
 
@@ -21,8 +22,11 @@ const UserRoute = require('./routes/UserRoute');
 const app = express();
 
 app.use(session({
-//     ****
-}))
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {secure:true}
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());

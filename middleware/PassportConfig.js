@@ -5,7 +5,7 @@ const crypto = require('crypto');
 
 
 passport.use(new GoogleStrategy({
-    clientId:process.env.CLIENT_ID,
+    clientID:process.env.CLIENT_ID,
     clientSecret:process.env.CLIENT_SECRET,
     callbackUrl:'/auth/google/callback',
     passReqToCallBack:true

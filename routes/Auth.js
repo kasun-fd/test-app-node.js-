@@ -14,4 +14,5 @@ router.get('/logout', (req,resp)=>{
 router.get('/google/callback', passport.authenticate('google'),(req,resp)=>{
     resp.redirect('profile');
 });
+
 module.exports = router;
