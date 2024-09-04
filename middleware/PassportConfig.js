@@ -2,6 +2,7 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const UserSchema = require('../model/UserSchema');
 const crypto = require('crypto');
+require('dotenv').config();
 
 
 passport.use(new GoogleStrategy({
